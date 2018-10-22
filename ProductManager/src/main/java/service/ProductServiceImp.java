@@ -16,6 +16,15 @@ public class ProductServiceImp implements ProductService {
         products.put(2, new Product(2,"Bike","Honda","B"));
         products.put(3, new Product(3, "Car", "BMW","C"));
     }
+
+    @Override
+    public ArrayList<Integer> listID(){
+        ArrayList<Integer> findList = new ArrayList<>();
+        for(int i : products.keySet()){
+            findList.add(i);
+        }
+        return findList;
+    }
     @Override
     public List<Product> findAll() {
         return new ArrayList<>(products.values());

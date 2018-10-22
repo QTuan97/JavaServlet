@@ -2,6 +2,7 @@ package service;
 
 import model.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ProductService {
@@ -14,5 +15,7 @@ public interface ProductService {
     void update(int id, Product product);
 
     void remove(int id);
+
+    ArrayList<Integer> listID();
 
 }

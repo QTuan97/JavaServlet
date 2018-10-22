@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServlet extends HttpServlet {
@@ -52,6 +54,9 @@ public class ProductServlet extends HttpServlet {
                 case "view":
                     viewProduct(request, response);
                     break;
+                case "find":
+                    findProduct(request, response);
+                    break;
                 default:
                     listProducts(request, response);
                     break;
@@ -60,7 +65,6 @@ public class ProductServlet extends HttpServlet {
     private void listProducts(HttpServletRequest request, HttpServletResponse response) {
         List<Product> products = this.productService.findAll();
         request.setAttribute("products", products);
-
         RequestDispatcher dispatcher = request.getRequestDispatcher("product/list.jsp");
         try {
             dispatcher.forward(request, response);
@@ -201,5 +205,56 @@ public class ProductServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private void findProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String input = request.getParameter("findID");
+        RequestDispatcher dispatcher = null;
+        ArrayList<Integer> findListID = productService.listID();
+        boolean flag = true;
+        String[] productArr = new String[3];
+        for(int i = 0; i < findListID.size(); i++) {
+            if (flag) {
+                Product product = productService.findById(findListID.get(i));
+
+                if(product.getName().equals(input)){
+                    productArr[0] = product.getName();
+                    productArr[1] = product.getType();
+                    productArr[2] = product.getVendor();
+                    flag = false;
+                }
+            }
+        }
+        request.setAttribute("products", productArr);
+        dispatcher = request.getRequestDispatcher("/product/find.jsp");
+//            if(product.getName().equals(input)){
+//                dispatcher = request.getRequestDispatcher("/product/find.jsp");
+//            }else{
+//                dispatcher = request.getRequestDispatcher("a-error.jsp");
+//            }
+        try {
+            dispatcher.forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*int id = Integer.parseInt(request.getParameter("findID"));
+        Product product = this.productService.findById(id);
+        RequestDispatcher dispatcher3;
+        if(product == null){
+            dispatcher = request.getRequestDispatcher("error-404.jsp");
+        }
+        else{
+            request.setAttribute("product", product);
+            dispatcher = request.getRequestDispatcher("product/find.jsp");
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 }

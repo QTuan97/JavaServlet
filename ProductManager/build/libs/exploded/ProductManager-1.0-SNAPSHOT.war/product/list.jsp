@@ -16,6 +16,12 @@
 <p>
     <a href="/products?action=create">Create new product</a>
 </p>
+<form method="get" action="/products">
+    <label for="findId">Find product by ID</label>
+    <input type="hidden" name="action" value="find">
+    <input type ="text" id="findId" name="findID">
+    <input type="submit" value="Find">
+</form>
 <table border="1">
     <tr>
         <td>Name</td>
